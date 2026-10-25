@@ -1,6 +1,6 @@
 dayjs = require('dayjs');
 
-hozirgivaqt = dayjs().format('YYYY-MM-DD HH:mm:ss') ;
+hozirgivaqt = dayjs().format('DD-MM-YYYY HH:mm:ss') ;
 
 console.log(hozirgivaqt);
 

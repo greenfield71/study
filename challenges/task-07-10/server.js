@@ -9,6 +9,12 @@ const products = [
     { id: 3, name: "Quloqchin", price: 50 }
 ];
 
+const users = [
+    { id:1, name:"Azamat", age: 20},
+    { id:2, name:"Maqsud", age: 20},
+    { id:3, name:"Bahrom", age: 18}
+];
+
 app.get('/', (req, res) => {
      res.send('Salom, Node.js!');
  });
