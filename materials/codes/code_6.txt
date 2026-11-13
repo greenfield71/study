@@ -1,0 +1,31 @@
+import { useEffect,useState } from 'react';
+import './App.css';
+
+function App() {
+   const base_url="https://jsonplaceholder.typicode.com/users"
+// useEffect,useState  hook lar
+   const[users,setUsers]=useState()
+
+   useEffect(()=>{
+      fetch(base_url).then(res=>res.json()).then(data=>setUsers(data))
+   },[])
+
+
+  return (
+   <main>
+   <h3>Bugungi tasklar</h3>
+    <div className="App">
+      {users?.map((item)=>
+     <div className='card'>
+      <h3>FIO:{item.name}</h3>
+      <p>Email:{item.email}</p>
+      <span>Tel: {item.phone}</span>
+     </div>
+     )}
+     
+    </div>
+    </main>
+  );
+}
+
+export default App;

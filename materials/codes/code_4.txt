@@ -1,0 +1,32 @@
+const express=require('express');
+const app=express();
+app.use(express.json());
+const users=[]
+// {
+// id: 1,
+// name: "John Doe",
+// age: 30,
+// }
+
+// Userlar listini olish Get method
+app.get('/users',(req,res)=>{
+    res.json(users);
+});
+
+// User qo'shish Post method
+app.post('/users',(req,res)=>{
+   console.log(req);
+   
+      const {id,name,age}=req.body;
+      if(!id || !name|| !age){
+         return res.status(400).json({error: "Id, name va age maydonlari majburiy"});
+      }
+      users.push({id,name,age});
+      res.status(200).json({message: "User muvaffaqiyatli qo'shildi"});
+     
+})
+
+
+app.listen(3000,()=>{
+    console.log('Server is running on port 3000');
+})
