@@ -1,0 +1,628 @@
+============================================================
+KONSPEKT — 2-QISM: TEXNOLOGIYA VA KOD (NODE.JS, EXPRESS, BAZA, XAVFSIZLIK)
+============================================================
+
+5-bo'lim: Node.js asoslari
+6-bo'lim: Express.js
+7-bo'lim: Amaliy mashg'ulotlar va kodlar (10 topshiriq, SQLite CRUD, React)
+8-bo'lim: Ma'lumotlar bazasi (ER model, Mongoose, Prisma, migratsiya)
+9-bo'lim: Autentifikatsiya va API xavfsizligi
+
+============================================================
+5-BO'LIM. NODE.JS ASOSLARI
+============================================================
+
+5.1. NODE.JS NIMA?
+------------------
+Chrome'ning V8 dvigateli asosida qurilgan, JavaScript'ni brauzerdan tashqarida (serverda) bajaradigan ochiq kodli, kross-platforma muhit.
+- V8 — JS tez bajariladi; hodisaga asoslangan bloklamaydigan I/O; npm — katta ekotizim; Windows/macOS/Linux.
+- Versiyalar (2026-okt): 24 — Active LTS (production uchun), 26 — oktyabrda LTS ga o'tadi. Production'da faqat LTS.
+- Tekshirish: node --version
+
+5.2. ARXITEKTURA (YUQORIDAN PASTGA)
+-----------------------------------
+Sizning kodingiz (app.js, Express) → Node.js standart kutubxonasi (fs, http, path, events, stream) → C++ bindings → V8 (JS dvigateli) + libuv (event loop, thread pool) → Operatsion tizim (fayl tizimi, tarmoq, protsesslar).
+- V8 — JS kodini mashina kodiga kompilyatsiya qiladi (JIT).
+- libuv — event loop va asinxron I/O; thread pool (odatda 4 ta oqim).
+- Bitta asosiy oqim: JS kodi bitta oqimda bajariladi; og'ir I/O OS yoki thread pool'ga topshiriladi.
+
+5.3. EVENT LOOP BOSQICHLARI (TARTIB BILAN)
+------------------------------------------
+1. timers — setTimeout, setInterval callback'lari
+2. pending callbacks — ba'zi tizim (tarmoq) xatolari callback'lari
+3. poll — I/O callback'lari (fayl, tarmoq); yangi hodisalarni kutadi
+4. check — setImmediate callback'lari
+5. close callbacks — yopilish hodisalari (socket.on('close'))
+
+Ish bor ekan tsikl takrorlanadi. Microtask'lar: har callbackdan keyin avval process.nextTick navbati, so'ng Promise (microtask) navbati to'liq bajariladi.
+
+Bajarilish tartibi (amalda):
+    console.log('sync 1');
+    setTimeout(() => console.log('timeout'), 0);
+    Promise.resolve().then(() => console.log('promise'));
+    process.nextTick(() => console.log('nextTick'));
+    console.log('sync 2');
+
+Natija: sync 1 → sync 2 → nextTick → promise → timeout.
+Eslab qolish: sinxron → nextTick → Promise → timers.
+
+5.4. ASINXRON KOD: 3 BOSQICH
+----------------------------
+
+a) Callback:
+    const fs = require('fs');
+    fs.readFile('data.txt', 'utf8', (err, data) => {
+      if (err) { console.error('Xato:', err.message); return; }
+      console.log('Fayl:', data);
+    });
+    console.log('Bu birinchi chiqadi!');   // avval shu, keyin fayl
+
+- Error-first konvensiya: callback'ning 1-argumenti — xato (err), qolganlari — natija.
+- Callback hell: ichma-ich callback'lar piramidasi (getUser → getOrders → getItems) — o'qish qiyin, xatolarni har darajada alohida tekshirish kerak. Yechim: Promise va async/await.
+
+b) Promise:
+Holatlar: pending (kutilmoqda) → fulfilled (resolve(value)) yoki rejected (reject(error)).
+- .then() — muvaffaqiyat natijasi · .catch() — xatoni ushlaydi · .finally() — har doim bajariladi · Promise.all() — parallel bajarish.
+    const fs = require('fs/promises');
+    fs.readFile('data.txt', 'utf8')
+      .then((data) => data.toUpperCase())
+      .then((text) => console.log(text))
+      .catch((err) => console.error(err.message))
+      .finally(() => console.log('Tugadi'));
+
+Promise zanjiri callback hell o'rniga tekis (flat) kod beradi.
+
+c) async/await:
+    const fs = require('fs/promises');
+    async function main() {
+      try {
+        const data = await fs.readFile('data.txt', 'utf8');
+        console.log(data.toUpperCase());
+      } catch (err) {
+        console.error('Xato:', err.message);
+      } finally {
+        console.log('Tugadi');
+      }
+    }
+    main();
+
+- async funksiya doim Promise qaytaradi; await Promise tugashini kutadi, oqimni bloklamaydi; xato try/catch/finally bilan.
+- await ishlarni ketma-ket bajaradi; bog'liq bo'lmagan ishlar uchun parallel:
+    const [a, b] = await Promise.all([
+      fs.readFile('a.txt', 'utf8'),
+      fs.readFile('b.txt', 'utf8'),
+    ]);
+
+5.5. MODULLAR: COMMONJS VA ES MODULES
+-------------------------------------
+    // CommonJS                         // ES Modules
+    // math.js                          // math.mjs
+    function add(a, b){return a+b;}     export function add(a, b){return a+b;}
+    module.exports = { add };           // app.mjs
+    // app.js                           import { add } from './math.mjs';
+    const { add } = require('./math');
+
+- Import -> CommonJS: require('./modul'); ES Modules: import x from './modul.mjs'
+- Eksport -> CommonJS: module.exports = {...}; ES Modules: export / export default
+- Top-level await -> CommonJS: Yo'q; ES Modules: Ha
+- Yoqish -> CommonJS: Standart (.js, .cjs); ES Modules: "type": "module" yoki .mjs
+
+5.6. NPM VA PACKAGE.JSON
+------------------------
+    npm init -y              # package.json yaratish
+    npm install express      # paket o'rnatish
+    npm install -D nodemon   # dev bog'liqlik
+    npm uninstall express    # o'chirish
+    npm update               # yangilash
+    npm run dev              # skriptni ishga tushirish
+    npx create-vite          # o'rnatmasdan ishlatish
+
+- node_modules/ — o'rnatilgan paketlar; hajmi katta, Git'ga qo'shilmaydi (.gitignore).
+- package-lock.json — aniq versiyalarni qotiradi; jamoada bir xil muhit.
+- npm registry — ochiq paketlar ombori.
+
+package.json maydonlari: name, version, type ("commonjs"), main, scripts (start: "node index.js", dev: "node --watch index.js"), dependencies (express ^5.2.1), devDependencies.
+- Versiya 5.2.1: 5 = MAJOR (buzuvchi o'zgarish), 2 = MINOR (yangi imkoniyat), 1 = PATCH (xato tuzatish).
+- ^5.2.1 — 5.x.x ichida yangilash mumkin; ~5.2.1 — faqat 5.2.x (patch).
+- dependencies — ishlashi uchun kerak; devDependencies — faqat ishlab chiqish uchun; scripts — npm run <nom>.
+
+============================================================
+6-BO'LIM. EXPRESS.JS
+============================================================
+
+6.1. EXPRESS NIMA?
+------------------
+Node.js uchun minimalistik va moslashuvchan veb-freymvork: routing, middleware, HTTP yordamchilari.
+- npm install express hozir Express 5 ni o'rnatadi; Node.js 18+ kerak; async handler xatolari avtomatik error handler'ga uzatiladi.
+- Imkoniyatlar: Routing app.get(), Middleware app.use(), JSON API res.json(), statik fayllar express.static().
+
+6.2. BIRINCHI SERVER (4 QADAM)
+------------------------------
+    mkdir server && cd server
+    npm init -y
+    npm install express
+    node index.js
+
+    const express = require('express');
+    const app = express();
+    const PORT = 3000;
+    app.get('/', (req, res) => { res.send('Salom, Express!'); });
+    app.listen(PORT, () => { console.log(`Server: http://localhost:${PORT}`); });
+
+Brauzer: http://localhost:3000. node --watch index.js — fayl o'zgarsa server avtomatik qayta ishga tushadi.
+
+6.3. ROUTING VA MIDDLEWARE
+--------------------------
+    app.use(express.json());                 // JSON body o'qish
+    app.use((req, res, next) => {            // middleware
+      console.log(req.method, req.url);
+      next();                                // keyingisiga uzatadi
+    });
+    app.get('/users/:id', (req, res) => { res.json({ id: req.params.id }); });
+    app.post('/users', (req, res) => { res.status(201).json(req.body); });
+
+- HTTP metodlar: GET — o'qish, POST — yaratish, PUT — yangilash, DELETE — o'chirish.
+- So'rov yo'li: Request → express.json() → logger middleware → Route handler → Response.
+- next() — so'rovni keyingi middleware'ga uzatadi.
+
+Nazorat savollari: event loop nima va Node nega bloklanmaydi; callback/Promise/async-await farqi; dependencies va devDependencies farqi.
+Uyga vazifa: GET /, GET /users/:id, POST /users li Express server (brauzer yoki curl bilan tekshirish).
+
+============================================================
+7-BO'LIM. AMALIY MASHG'ULOTLAR VA KODLAR
+============================================================
+
+7.1. 1-HAFTA (TAYYORGARLIK)
+---------------------------
+Node.js, Git Bash, PostgreSQL, Postman, Express.js o'rnatish.
+
+7.2. 2–3-HAFTA: 10 TA KICHIK TOPSHIRIQ
+--------------------------------------
+Maqsad: Node.js muhiti, asinxron dasturlash (callback, Promise, async/await), modullar, npm/package.json, Express bilan oddiy HTTP server.
+
+- 1 -> Topshiriq: app.js: ism chiqarish, 2 son qo'shish, node app.js bilan ishga tushirish; Mavzu: Node muhiti
+- 2 -> Topshiriq: calculator.js: add(), subtract(), multiply(); app.js ga import qilish; Mavzu: CommonJS yoki ESM
+- 3 -> Topshiriq: npm init -y, npm install dayjs, joriy sana-vaqtni chiqarish, package.json'da tekshirish; Mavzu: npm, package.json
+- 4 -> Topshiriq: setTimeout bilan 2 soniyadan keyin "Amaliy mashg'ulot boshlandi!"; kutish vaqtida boshqa xabar; tartibni tushuntirish; Mavzu: Callback, asinxronlik
+- 5 -> Topshiriq: checkNumber(number): musbat → resolve, aks holda reject; .then()/.catch(); Mavzu: Promise
+- 6 -> Topshiriq: getStudent() async: 1 soniyadan keyin {name:'Ali', age:20, course:'Computer Science'}; await bilan olish; Mavzu: async/await
+- 7 -> Topshiriq: npm init -y, npm install express, server.js 3000-port, GET / → "Salom, Node.js!"; Mavzu: Express, GET
+- 8 -> Topshiriq: GET /about, /contact, /time (joriy sana-vaqt); brauzer/Postman; Mavzu: Routing
+- 9 -> Topshiriq: GET /users/:id → JSON {message:"Foydalanuvchi topildi", id:"15"}; req.params.id; Mavzu: Route params
+- 10 -> Topshiriq: Mahsulotlar massivi (id, name, price); GET /products, GET /products/:id; topilmasa 404 + xabar; Mavzu: Mini API, status kodlar
+
+Tavsiya: 1–3 modul/npm; 4–6 asinxron; 7–10 Express.
+
+Qo'shimcha — Express ishga tushirish kodi:
+    const express = require("express");
+    const app = express();
+    const PORT = 3000;
+    app.get("/", (req, res) => { res.send("Salom, Express.js!"); });
+    app.listen(PORT, () => { console.log(`Server http://localhost:${PORT}`); });
+
+(mkdir node-practice; cd node-practice; npm init -y; npm install express; node server.js)
+
+Topshiriqlar yechimi namunalari (o'z kodingizdan):
+    // 5-topshiriq: Promise
+    function checkNumber(n){
+      return new Promise((resolve, reject) => {
+        if (n > 0) resolve("Son musbat"); else reject("Son musbat emas");
+      });
+    }
+    checkNumber(5).then(console.log).catch(console.error);
+    
+    // 6-topshiriq: async/await
+    const getStudent = async () => {
+      await new Promise(r => setTimeout(r, 1000));
+      return { name: "Ali", age: 20, course: "Computer Science" };
+    };
+    (async () => console.log(await getStudent()))();
+    
+    // 10-topshiriq: 404
+    app.get('/products/:id', (req, res) => {
+      const p = products.find(x => x.id == req.params.id);
+      if (!p) return res.status(404).json({ message: "Mahsulot topilmadi" });
+      res.json(p);
+    });
+
+7.3. SQLITE BILAN EXPRESS (STUDENTS JADVALI) — CODE_1 / CODE_2
+--------------------------------------------------------------
+    const express = require('express');
+    const sqlite3 = require('sqlite3').verbose();
+    const app = express();
+    const port = 3000;
+    app.use(express.json());
+    
+    const db = new sqlite3.Database('./database.db');   // fayl-baza
+    
+    db.run(`CREATE TABLE IF NOT EXISTS students (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      age INTEGER NOT NULL,
+      course TEXT NOT NULL
+    )`);
+    db.run(`INSERT INTO students (name, age, course) VALUES ('Aliyev Vali', 25, 'B')`);
+    
+    // Barcha studentlarni olish — GET
+    app.get('/students', (req, res) => {
+      db.all('SELECT * FROM students', (err, rows) => {
+        if (err) res.status(500).json({ error: err.message });
+        else res.json(rows);
+      });
+    });
+    
+    app.listen(port, () => console.log(`Server is running on http://localhost:${port}`));
+
+Muhim so'zlar: db.run (CREATE/INSERT/UPDATE/DELETE), db.all (ko'p qator), db.get (bitta qator); PRIMARY KEY AUTOINCREMENT, NOT NULL.
+
+TOPSHIRIQ (PDF): shu jadval uchun POST, PUT, DELETE, GET by id API'larini yozish. Naqsh:
+    // GET by id
+    app.get('/students/:id', (req, res) => {
+      db.get('SELECT * FROM students WHERE id = ?', [req.params.id], (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!row) return res.status(404).json({ error: 'Topilmadi' });
+        res.json(row);
+      });
+    });
+    // POST
+    app.post('/students', (req, res) => {
+      const { name, age, course } = req.body;
+      db.run('INSERT INTO students (name, age, course) VALUES (?,?,?)',
+        [name, age, course], function (err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.status(201).json({ id: this.lastID, name, age, course });
+        });
+    });
+    // PUT
+    app.put('/students/:id', (req, res) => {
+      const { name, age, course } = req.body;
+      db.run('UPDATE students SET name=?, age=?, course=? WHERE id=?',
+        [name, age, course, req.params.id], function (err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ updated: this.changes });
+        });
+    });
+    // DELETE
+    app.delete('/students/:id', (req, res) => {
+      db.run('DELETE FROM students WHERE id=?', [req.params.id], function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ deleted: this.changes });
+      });
+    });
+
+(? — parametrli so'rov, SQL-injection'dan himoya.)
+
+7.4. XOTIRA MASSIVIDA USERS API — CODE_3 / CODE_4
+-------------------------------------------------
+    const express = require('express');
+    const app = express();
+    app.use(express.json());      // code_4 da qo'shilgan — busiz req.body = undefined!
+    const users = [];             // {id, name, age}
+    
+    app.get('/users', (req, res) => { res.json(users); });
+    
+    app.post('/users', (req, res) => {
+      const { id, name, age } = req.body;
+      if (!id || !name || !age) {
+        return res.status(400).json({ error: "Id, name va age maydonlari majburiy" });
+      }
+      users.push({ id, name, age });
+      res.status(200).json({ message: "User muvaffaqiyatli qo'shildi" });
+    });
+    
+    app.listen(3000, () => console.log('Server is running on port 3000'));
+
+- code_3 → code_4 farqi: app.use(express.json()) qo'shildi (body'ni JSON sifatida o'qish uchun shart).
+- 400 — mijoz xatosi (maydon yetishmaydi); muvaffaqiyatli yaratishda to'g'risi 201.
+- Ma'lumot massivda — server o'chsa yo'qoladi.
+
+7.5. 4-HAFTA: ONLAYN SHOP LANDING PAGE (EXPRESS + REACT)
+--------------------------------------------------------
+
+React komponent (code_6):
+    import { useEffect, useState } from 'react';
+    import './App.css';
+    
+    function App() {
+      const base_url = "https://jsonplaceholder.typicode.com/users";
+      const [users, setUsers] = useState();                // state
+    
+      useEffect(() => {                                    // sahifa ochilganda 1 marta
+        fetch(base_url).then(res => res.json()).then(data => setUsers(data));
+      }, []);                                              // [] — faqat birinchi renderda
+    
+      return (
+        <main>
+          <h3>Bugungi tasklar</h3>
+          <div className="App">
+            {users?.map((item) =>
+              <div className='card'>
+                <h3>FIO:{item.name}</h3>
+                <p>Email:{item.email}</p>
+                <span>Tel: {item.phone}</span>
+              </div>
+            )}
+          </div>
+        </main>
+      );
+    }
+    export default App;
+
+- useState — holat saqlaydi; useEffect(fn, []) — yon ta'sir (API chaqirish) bir marta; fetch(url).then(res => res.json()) — ma'lumot olish; users?.map — ?. (optional chaining): users hali undefined bo'lsa xato bermaydi.
+- Ro'yxatda har elementga key berish kerak (kodda yo'q — eslatma).
+
+CSS (code_7):
+    .App { max-width: 800px; margin: 0 auto; height: 100vh;
+           display: grid; grid-template-columns: 1fr 1fr; gap: 10px }   /* 2 ustunli grid */
+    .card { background: rgb(245,183,183); padding: 20px; height: 200px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            border-radius: 10px; box-shadow: 0 0 10px rgb(210,210,254); }
+    main { text-align: center; }
+
+============================================================
+8-BO'LIM. MA'LUMOTLAR BAZASI
+============================================================
+
+8.1. ER MODEL ASOSIY TUSHUNCHALARI
+----------------------------------
+- Entity (mohiyat) — real obyekt (User, Project, Task) → jadval/kolleksiya.
+- Attribute — xususiyat (name, email, status, deadline).
+- Primary key (PK) — yozuvning yagona identifikatori: id (SQL), _id (MongoDB).
+- Relationship — mohiyatlar orasidagi bog'lanish.
+- Foreign key (FK) — boshqa mohiyat kalitiga havola: Task.projectId → Project.id.
+- Cardinality — bog'lanish soni: 1:1, 1:N, M:N.
+
+Task Manager ER: User(id, name, email unique) 1—N Project(id, name, deadline, FK userId) 1—N Task(id, title, points, status, FK projectId, FK assigneeId); User 1—N Task ("mas'ul"); Task M—N Tag(id, name) ("teglanadi").
+M:N: SQL'da bog'lovchi jadval orqali; MongoDB'da ID'lar massivi.
+
+8.2. MUNOSABATLAR: SQL VA MONGODB
+---------------------------------
+
+- 1:1 -> Misol: User—Profile; PostgreSQL + Prisma: Profile.userId + @unique; MongoDB + Mongoose: embed yoki ref
+- 1:N -> Misol: Project—Task; PostgreSQL + Prisma: Task.projectId FK; Project.tasks Task[]; MongoDB + Mongoose: Task.project: ObjectId (ref:'Project')
+- M:N -> Misol: Task—Tag; PostgreSQL + Prisma: yashirin bog'lovchi jadval: tags Tag[] / tasks Task[]; MongoDB + Mongoose: havolalar massivi tags:[ObjectId]
+
+- Embed — birga o'qiladigan, kichik, mustaqil o'smaydigan ma'lumot uchun.
+- Reference — mustaqil o'sadigan yoki ko'p joyda ishlatiladigan ma'lumot uchun.
+
+8.3. SQL YOKI NOSQL?
+--------------------
+- Qat'iy sxema va cheklovlar -> MongoDB + Mongoose (hujjatli, NoSQL): Moslashuvchan hujjatlar (JSON/BSON)
+- JOIN va murakkab so'rovlar tabiiy -> MongoDB + Mongoose (hujjatli, NoSQL): Tuzilma tez o'zgaradigan loyihaga qulay
+- Prisma: type-safe klient, o'rnatilgan migratsiya -> MongoDB + Mongoose (hujjatli, NoSQL): Mongoose: sxema, validatsiya, middleware
+- Mos: o'zaro bog'langan, aniq tuzilmali ma'lumot -> MongoDB + Mongoose (hujjatli, NoSQL): Mos: katalog, kontent, ierarxik ma'lumot
+
+Qoida: ma'lumotlar kuchli bog'langan bo'lsa — SQL; tuzilma tez o'zgarsa — MongoDB.
+
+8.4. MONGOOSE: SXEMA VA MODEL
+-----------------------------
+    const { Schema, model } = require('mongoose');
+    const taskSchema = new Schema({
+      title:   { type: String, required: true },
+      points:  { type: Number, min: 1 },
+      status:  { type: String, enum: ['todo','doing','done'], default: 'todo' },
+      project: { type: Schema.Types.ObjectId, ref: 'Project', index: true },
+      tags:    [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+    }, { timestamps: true });
+    module.exports = model('Task', taskSchema);
+
+- Schema — tuzilma, turlar, validatsiya (required, enum, min). Model — kolleksiya bilan ishlash interfeysi (Task.find(), Task.create()). ref — boshqa kolleksiyaga havola, populate bilan yuklanadi. timestamps — createdAt, updatedAt avtomatik.
+
+Mongoose CRUD:
+    await Task.create({ title:'ER model', points:5, project: projectId });          // CREATE
+    const todo = await Task.find({ status:'todo' }).populate('project','name')
+                           .sort({ createdAt:-1 });                                 // READ
+    await Task.findByIdAndUpdate(id, { status:'done' }, { new:true });              // UPDATE
+    await Task.findByIdAndDelete(id);                                               // DELETE
+
+- { new:true } — yangilangan hujjatni qaytaradi; populate — JOIN'ga o'xshash; o'chirishda bog'liq hujjatlarni o'zingiz tozalaysiz.
+
+8.5. PRISMA: SXEMA VA CRUD
+--------------------------
+    model Task {
+      id        Int      @id @default(autoincrement())
+      title     String
+      points    Int?
+      status    String   @default("todo")
+      projectId Int
+      project   Project  @relation(fields: [projectId], references: [id])
+      tags      Tag[]
+    }
+    model Tag {
+      id    Int    @id @default(autoincrement())
+      name  String @unique
+      tasks Task[]
+    }
+
+- @id, @default — PK va standart qiymat; @relation — FK maydoni va havola; Tag[] — yashirin M:N (bog'lovchi jadvalni Prisma o'zi yaratadi); Int? — NULL bo'lishi mumkin.
+    await prisma.task.create({ data:{ title:'ER model', points:5,
+            project:{ connect:{ id:1 } } } });                        // CREATE
+    const todo = await prisma.task.findMany({ where:{status:'todo'},
+            include:{ project:true } });                              // READ
+    await prisma.task.update({ where:{id}, data:{status:'done'} });   // UPDATE
+    await prisma.task.delete({ where:{id} });                         // DELETE
+
+- connect — mavjud yozuvga bog'laydi; include/select — bog'liq yozuv yoki kerakli maydonlar; type-safe (TypeScript tekshiradi); $transaction — bir nechta amal bitta tranzaksiyada.
+
+8.6. MIGRATSIYALAR (SXEMANI VERSIYALASH)
+----------------------------------------
+Prisma Migrate (PostgreSQL):
+    npx prisma migrate dev --name add_tasks   # SQL migratsiya yaratadi va lokal bazaga qo'llaydi
+    npx prisma migrate deploy                 # production'da tayyor migratsiyalarni qo'llaydi
+    npx prisma generate                       # klientni generatsiya qiladi
+
+prisma/migrations/ papkasi git'da saqlanadi.
+
+MongoDB + Mongoose: majburiy migratsiya yo'q (sxema moslashuvchan); ommaviy o'zgarish uchun migrate-mongo (npx migrate-mongo init | create add-points | up); indekslar: Model.syncIndexes().
+Qoida: migratsiyani kod kabi versiyalang — har sxema o'zgarishi alohida fayl.
+
+Amaliy topshiriq (Task Manager): WBS va Gantt tuzish; ER model chizish; tanlangan stekda 2 ta model + CRUD; birinchi migratsiya.
+
+============================================================
+9-BO'LIM. AUTENTIFIKATSIYA VA API XAVFSIZLIGI
+============================================================
+
+9.1. AUTHN VA AUTHZ
+-------------------
+- "Siz kimsiz?" -> Avtorizatsiya (AuthZ): "Sizga ruxsat bormi?"
+- Login+parol, OTP, OAuth -> Avtorizatsiya (AuthZ): Rollar (RBAC), resurs egasini tekshirish (ownership)
+- Natija: foydalanuvchi aniqlandi (token) -> Avtorizatsiya (AuthZ): Ruxsat yo'q bo'lsa: 403 Forbidden
+- Xato bo'lsa: 401 Unauthorized
+
+Oqim: So'rov → AuthN middleware → AuthZ middleware → Controller. Tartib: avval autentifikatsiya, keyin avtorizatsiya.
+
+9.2. PAROLNI XESHLASH
+---------------------
+- Ochiq matn — baza sizsa hammasi fosh; hech qachon.
+- Shifrlash — kalit bilan qaytariladi; kalit sizsa fosh; parol uchun mos emas.
+- Xeshlash — bir tomonlama, qaytarib bo'lmaydi; kirishda parol qayta xeshlanib solishtiriladi.
+- Ro'yxatdan o'tish: parol → bcrypt.hash() → xesh bazaga. Kirish: kiritilgan parol → bcrypt.compare() → mos/mos emas.
+
+9.3. BCRYPT QANDAY ISHLAYDI
+---------------------------
+Xesh tuzilishi: $2b$ (versiya) 12$ (cost factor: 2¹² = 4096 raund) + salt (22 belgi) + xesh (31 belgi).
+- Salt — har parolga tasodifiy qiymat: bir xil parollar turli xesh beradi, tayyor (rainbow) jadvallar ishlamaydi.
+- Cost (work factor) — ataylab sekin; kompyuterlar tezlashgani sari oshiriladi (odatda 10–12).
+- Cheklov: parolning faqat dastlabki 72 bayti hisobga olinadi.
+- Alternativlar: Argon2id, scrypt.
+- Nega SHA-256 emas? U tez (brute-force osonroq), bcrypt esa ataylab sekin + salt'li.
+
+    import bcrypt from "bcrypt";
+    const ROUNDS = 12;
+    const hash = await bcrypt.hash(password, ROUNDS);          // ro'yxatdan o'tish
+    await User.create({ email, passwordHash: hash });
+    const ok = await bcrypt.compare(password, user.passwordHash);   // kirish
+    if (!ok) return res.status(401).json({ error: "Email yoki parol noto'g'ri" });
+
+Qoidalar: parolni logga yozmang; xato xabari umumiy ("email yoki parol noto'g'ri"); minimal uzunlik 8+; brute-force'ga qarshi rate limit.
+
+9.4. JWT (JSON WEB TOKEN)
+-------------------------
+Tuzilishi: HEADER . PAYLOAD . SIGNATURE
+- Header: {"alg":"HS256","typ":"JWT"} — algoritm va tur.
+- Payload: {"sub":"42","role":"user","exp":1798761600} — da'volar (claims): kim, rol, amal qilish muddati.
+- Signature: HMAC-SHA256(base64url(header) + "." + base64url(payload), secret) — yaxlitlikni kafolatlaydi; o'zgartirilsa tekshiruv o'tmaydi.
+- DIQQAT: Payload shifrlanmagan, faqat Base64URL — parol va maxfiy ma'lumotni yozmang.
+
+Oqim: Klient POST /login {email,password} → server bcrypt.compare → jwt.sign → 200 {accessToken} → Klient GET /api/orders + Authorization: Bearer <token> → server jwt.verify (imzo va exp) → 200 OK (yoki 401/403).
+
+    const token = jwt.sign({ sub: user.id, role: user.role },
+                           process.env.JWT_SECRET, { expiresIn: "15m" });
+    
+    function auth(req, res, next) {
+      const [, token] = (req.headers.authorization ?? "").split(" ");
+      try {
+        req.user = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ["HS256"] });
+        next();
+      } catch {
+        res.status(401).json({ error: "Unauthorized" });
+      }
+    }
+
+JWT xavfsizlik qoidalari:
+1. Qisqa muddat — access token 5–15 daq; yangilash uchun alohida refresh token.
+2. Kuchli maxfiy kalit — kamida 32 tasodifiy bayt; .env yoki sirlar menejerida.
+3. Algoritmni belgilang — verifyda algorithms ro'yxati ("alg: none" hujumidan himoya).
+4. Payload ochiq — faqat minimal ma'lumot.
+5. Xavfsiz saqlash — httpOnly + Secure + SameSite cookie; localStorage XSS'ga zaif.
+6. Bekor qilish — refresh tokenni bazada saqlash, rotatsiya, logout'da o'chirish.
+7. Xatoda 401 qaytaring, sababini oshkor qilmang.
+
+9.5. RBAC (ROLLAR BO'YICHA AVTORIZATSIYA)
+-----------------------------------------
+- user -> O'qish: Ha; Yaratish: Yo'q; O'chirish: Yo'q
+- manager -> O'qish: Ha; Yaratish: Ha; O'chirish: Yo'q
+- admin -> O'qish: Ha; Yaratish: Ha; O'chirish: Ha
+
+Eng kam huquq tamoyili — har rolga faqat zarur amallar; tekshiruv server tomonida, har himoyalangan endpointda.
+    const allow = (...roles) => (req, res, next) =>
+      roles.includes(req.user.role) ? next() : res.sendStatus(403);
+    
+    app.delete("/users/:id", auth, allow("admin"), removeUser);
+
+DIQQAT: Rol yetarli emas: GET /orders/:id da resurs egasini ham tekshiring (order.userId === req.user.sub), aks holda — OWASP API1: BOLA.
+
+9.6. KIRUVCHI MA'LUMOTLAR VALIDATSIYASI
+---------------------------------------
+Mijozga ishonib bo'lmaydi: serverda tur, format, uzunlik, diapazonni tekshiring; noma'lum maydonlarni rad eting (whitelist). Xato → 400 Bad Request. SQL uchun parametrli so'rovlar (injection'dan himoya).
+    // Joi
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      age: Joi.number().integer().min(18),
+      password: Joi.string().min(8).max(72).required(),
+    });
+    const { error, value } = schema.validate(req.body, { stripUnknown: true });
+    if (error) return res.status(400).json(error);
+    
+    // Zod
+    const schema = z.object({
+      email: z.string().email(),
+      age: z.number().int().min(18).optional(),
+      password: z.string().min(8).max(72),
+    }).strict();
+    const r = schema.safeParse(req.body);
+    if (!r.success) return res.status(400).json(r.error);
+
+9.7. CORS
+---------
+Brauzer boshqa origin'ga so'rov yuboradi (avval preflight: OPTIONS) → server Access-Control-Allow-Origin va boshqa sarlavhalarni qaytaradi → origin ruxsat etilgan bo'lsa brauzer asosiy so'rovni bajaradi, aks holda bloklaydi.
+    import cors from "cors";
+    app.use(cors({
+      origin: ["https://app.example.uz"],
+      methods: ["GET","POST","PUT","DELETE"],
+      credentials: true,
+    }));
+
+- Origin'larni aniq ro'yxat bilan bering; production'da origin: '*' ishlatmang.
+- Access-Control-Allow-Origin: * va credentials: true birga ishlamaydi.
+- DIQQAT: CORS — brauzer siyosati, server himoyasi emas: curl yoki Postman uni chetlab o'tadi.
+
+9.8. .ENV VA SIRLAR
+-------------------
+    # .env — repoga yuklanmaydi
+    PORT=3000
+    DATABASE_URL=postgres://user:pass@host/db
+    JWT_SECRET=<uzun tasodifiy qiymat>
+    JWT_EXPIRES_IN=15m
+    CORS_ORIGIN=https://app.example.uz
+
+.gitignore: .env, .env.*, !.env.example. Kodda: import "dotenv/config"; const key = process.env.JWT_SECRET;
+- Repoga faqat .env.example (qiymatsiz); ishga tushganda majburiy o'zgaruvchilarni tekshiring (masalan Zod bilan).
+- Production'da sirlar menejeri: Vault, AWS Secrets Manager, CI/CD sirlari.
+- Sir sizsa — darhol almashtiring (git tarixidan o'chirish yetarli emas).
+- Node 20.6+: node --env-file=.env app.js (paketsiz).
+
+9.9. OWASP TOP 10:2025
+----------------------
+- A01 -> Nomi: Kirish nazoratining buzilishi (Broken Access Control; SSRF shu yerga qo'shilgan)
+- A02 -> Nomi: Xavfsizlik sozlamalari xatosi (Security Misconfiguration)
+- A03 -> Nomi: YANGI Ta'minot zanjiri nosozliklari (Software Supply Chain Failures)
+- A04 -> Nomi: Kriptografik nosozliklar
+- A05 -> Nomi: In'ektsiya (Injection)
+- A06 -> Nomi: Xavfli dizayn (Insecure Design)
+- A07 -> Nomi: Autentifikatsiya nosozliklari
+- A08 -> Nomi: Yaxlitlik nosozliklari (Software or Data Integrity Failures)
+- A09 -> Nomi: Jurnal va ogohlantirish nosozliklari (Logging and Alerting Failures)
+- A10 -> Nomi: YANGI Istisnolarni noto'g'ri qayta ishlash (Mishandling of Exceptional Conditions)
+
+9.10. OWASP API SECURITY TOP 10 (2023) + BUGUNGI MAVZULAR BILAN ALOQASI
+-----------------------------------------------------------------------
+API1 BOLA (obyekt darajasida avtorizatsiya) · API2 Autentifikatsiya buzilishi · API3 BOPLA (obyekt xususiyati darajasida avtorizatsiya) · API4 Resurslardan cheklanmagan foydalanish · API5 BFLA (funksiya darajasida avtorizatsiya) · API6 Biznes jarayonlariga cheklanmagan kirish · API7 SSRF · API8 Xavfsizlik konfiguratsiyasi xatolari · API9 Inventarizatsiyani noto'g'ri boshqarish · API10 Uchinchi tomon API'laridan xavfli foydalanish.
+
+Qaysi himoya qaysi xavfga:
+- API1, API5 → RBAC + resurs egasini tekshirish
+- API2 → bcrypt, JWT, 401 javobi
+- API3 → Joi/Zod qat'iy sxema (strict)
+- API4 → rate limit, so'rov hajmini cheklash
+- API8 → CORS, .env, xavfsiz sozlamalar
+
+9.11. XULOSA VA NAZORAT SAVOLLARI
+---------------------------------
+1. Risk = ehtimollik × ta'sir.
+2. DoD "tayyor" mezonini belgilaydi.
+3. Parol faqat bcrypt kabi sekin xesh bilan saqlanadi.
+4. JWT: qisqa muddat, kuchli kalit; 401 = autentifikatsiya xatosi (kim ekanligi noma'lum), 403 = ruxsat yo'q (kimligi ma'lum, huquqi yo'q).
+5. Validatsiya, CORS, .env, OWASP — har API uchun nazorat ro'yxati.
+
+Savollar: parol uchun nega SHA-256 emas bcrypt (tez + salt yo'q → brute-force/rainbow); 401 va 403 qachon; CORS nega serverni himoya qilmaydi (faqat brauzer qo'llaydi, curl/Postman chetlab o'tadi).

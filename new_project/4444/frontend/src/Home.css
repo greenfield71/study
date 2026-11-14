@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --ink: #111111;
+  --paper: #fffbe8;
+  --violet: #7c3aed;
+  --pink: #ff3b6b;
+  --yellow: #ffd60a;
+  --green: #3ddc97;
+  --blue: #4cc9f0;
+  --orange: #ff7a00;
+}
+
+/* ---------- Sahifa ---------- */
+.kb-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  overflow: hidden;
+  background-color: var(--violet);
+  background-image: radial-gradient(var(--ink) 2px, transparent 2.5px);
+  background-size: 26px 26px;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--ink);
+}
+
+/* Katta, qattiq rangli shakllar (fon bezagi) */
+.kb-page::before,
+.kb-page::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  border: 4px solid var(--ink);
+  animation: kb-turn 24s linear infinite;
+}
+
+.kb-page::before {
+  width: 320px;
+  height: 320px;
+  top: -90px;
+  left: -90px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+.kb-page::after {
+  width: 260px;
+  height: 260px;
+  bottom: -70px;
+  right: -60px;
+  border-radius: 0;
+  background: var(--pink);
+  animation-direction: reverse;
+}
+
+@keyframes kb-turn {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Sarlavha ---------- */
+.kb-title {
+  text-align: center;
+}
+
+.kb-title h1 {
+  display: inline-block;
+  padding: 6px 22px 10px;
+  font-size: clamp(42px, 9vw, 80px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  background: var(--green);
+  border: 4px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 8px 8px 0 var(--ink);
+  transform: rotate(-2deg);
+  animation: kb-wobble 3.2s ease-in-out infinite;
+}
+
+@keyframes kb-wobble {
+  0%, 100% { transform: rotate(-2deg); }
+  50%      { transform: rotate(2deg); }
+}
+
+.kb-title p {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--yellow);
+  border-radius: 999px;
+}
+
+/* ---------- Karta ---------- */
+.kb-card {
+  width: min(100%, 860px);
+  padding: 30px;
+  border-radius: 32px;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  box-shadow: 14px 14px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  animation: kb-rise 600ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes kb-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Ekran ---------- */
+.kb-display {
+  position: relative;
+  min-height: 120px;
+  padding: 24px 28px;
+  border-radius: 22px;
+  background: var(--ink);
+  border: 4px solid var(--ink);
+  box-shadow: inset 0 0 0 4px var(--yellow);
+  display: flex;
+  align-items: center;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--yellow);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.kb-text {
+  white-space: pre-wrap;
+}
+
+.kb-caret {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 6px;
+  height: 36px;
+  margin-left: 8px;
+  background: var(--pink);
+  animation: kb-blink 0.9s steps(1) infinite;
+}
+
+@keyframes kb-blink {
+  50% { opacity: 0; }
+}
+
+/* ---------- Tugmalar ---------- */
+.kb-keys {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kb-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.kb-row--bottom {
+  margin-top: 6px;
+}
+
+.key {
+  --key-bg: var(--paper);
+  --key-fg: var(--ink);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 78px;
+  height: 74px;
+  border: 4px solid var(--ink);
+  border-radius: 18px;
+  background: var(--key-bg);
+  color: var(--key-fg);
+  font: inherit;
+  font-size: 24px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 7px 0 var(--ink);
+  transition: transform 90ms ease, box-shadow 90ms ease, background-color 120ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Qatorlar: har biri o'z rangida */
+.kb-row--1 .key { --key-bg: var(--pink); --key-fg: #fff; }
+.kb-row--2 .key { --key-bg: var(--yellow); --key-fg: var(--ink); }
+.kb-row--3 .key { --key-bg: var(--green); --key-fg: var(--ink); }
+
+.key:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 0 var(--ink);
+  background: var(--orange);
+  color: var(--ink);
+}
+
+.key:active,
+.key--pressed {
+  transform: translateY(7px);
+  box-shadow: 0 0 0 var(--ink);
+  background: var(--blue);
+  color: var(--ink);
+}
+
+.key:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.key--wide {
+  flex: 0 0 110px;
+  max-width: none;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  --key-bg: var(--paper);
+  --key-fg: var(--ink);
+}
+
+.key--action {
+  --key-bg: var(--ink);
+  --key-fg: var(--pink);
+}
+
+.key--space {
+  flex: 1 1 0;
+  max-width: 380px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  --key-bg: var(--blue);
+  --key-fg: var(--ink);
+}
+
+/* ---------- Telefon ---------- */
+@media (max-width: 560px) {
+  .kb-card {
+    padding: 18px;
+    border-radius: 24px;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .kb-display {
+    font-size: 28px;
+    min-height: 84px;
+  }
+  .kb-row {
+    gap: 5px;
+  }
+  .key {
+    height: 58px;
+    font-size: 19px;
+    border-radius: 12px;
+    box-shadow: 0 5px 0 var(--ink);
+  }
+  .key--wide {
+    flex: 0 0 68px;
+    font-size: 12px;
+  }
+  .key--space {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-page::before,
+  .kb-page::after,
+  .kb-card,
+  .kb-title h1,
+  .kb-caret {
+    animation: none;
+  }
+}

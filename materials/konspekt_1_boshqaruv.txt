@@ -1,0 +1,459 @@
+============================================================
+KONSPEKT — 1-QISM: LOYIHA BOSHQARUVI (NAZARIYA)
+============================================================
+
+1-bo'lim: Loyiha va professionalizm
+2-bo'lim: SDLC va metodologiyalar (Agile, Scrum, Kanban)
+3-bo'lim: Loyihani rejalashtirish va ishni baholash
+4-bo'lim: Risk va sifatni boshqarish
+
+============================================================
+1-BO'LIM. LOYIHA VA PROFESSIONALIZM
+============================================================
+
+1.1. FANNING MAQSADI
+--------------------
+- Boshqaruv: AT loyihalarini Agile/Scrum asosida rejalashtirish, boshqarish, yakunlash.
+- Texnologiya: Node.js, React.js, React Native bilan jamoada backend + veb + mobil mahsulot yaratish.
+- Fan vazifalari: talablarni aniqlash, reja tuzish, risk va sifat boshqaruvi; REST API, baza, JWT (Express); React; React Native (Expo); Git/GitHub, testlash, hujjatlash; bulutga deploy; etika, litsenziya, ma'lumotlar himoyasi.
+
+1.2. LOYIHA TUSHUNCHASI
+-----------------------
+Loyiha — noyob mahsulot, xizmat yoki natija yaratish uchun amalga oshiriladigan vaqtinchalik faoliyat.
+
+Loyihaning 6 ta belgisi:
+1. Aniq maqsad
+2. Vaqt chegarasi (boshlanish va tugash sanasi bor)
+3. Noyoblik (natija har safar o'ziga xos)
+4. Cheklangan resurs (odam, vaqt, mablag')
+5. Noaniqlik va risk
+6. Jamoaviy mehnat
+
+Loyiha va operatsion faoliyat:
+
+- Davomiylik -> Loyiha: Vaqtinchalik, tugaydi; Operatsion faoliyat: Doimiy, davom etadi
+- Natija -> Loyiha: Noyob mahsulot/xizmat; Operatsion faoliyat: Takrorlanuvchi natija
+- Maqsad -> Loyiha: Natijaga erishib yakunlash; Operatsion faoliyat: Jarayonni qo'llab-quvvatlash
+- Misol -> Loyiha: Mobil ilova ishlab chiqish; Operatsion faoliyat: Serverni kundalik kuzatish
+
+- Loyiha: talabalar uchun mobil ilova; universitet portaliga yangi veb-interfeys; tizimni bulutga ko'chirish; hackathon uchun MVP.
+- Loyiha emas: server holatini kundalik kuzatish; foydalanuvchilarni doimiy qo'llab-quvvatlash; har oylik hisobotni takroran tayyorlash; zaxira nusxalarni jadval bo'yicha olish.
+
+1.3. AT LOYIHALARINING O'ZIGA XOSLIGI
+-------------------------------------
+- Nomoddiy mahsulot — kodni "ko'rib" bo'lmaydi, progressni o'lchash qiyin.
+- O'zgaruvchan talablar — buyurtmachi jarayonda aniqlashtiradi.
+- Tez eskirish — texnologiya, kutubxonalar tez yangilanadi.
+- Texnik murakkablik — ko'p qatlam va integratsiya o'zaro bog'langan.
+
+Nomoddiylik muammosi: qurilishda 90% tayyor bino ko'rinadi, dasturda 90% tayyor kod ko'rinmaydi.
+Yechim: ishlaydigan inkrementni muntazam namoyish qilish; progressni vazifalar doskasida ko'rsatish; sifatni avtomatik testlar bilan o'lchash.
+
+Loyihalar nega muvaffaqiyatsiz bo'ladi (6 sabab):
+1. Talablar noaniq/to'liq emas
+2. Real bo'lmagan reja va baholash
+3. Qamrovning nazoratsiz kengayishi
+4. Risklarga e'tiborsizlik
+5. Jamoada zaif muloqot
+6. Testlash va sifatga kam e'tibor
+
+1.4. LOYIHA HAYOT SIKLI (5 BOSQICH)
+-----------------------------------
+1. Boshlash — maqsad, buyurtmachi, ustav
+2. Rejalashtirish — qamrov, jadval, byudjet, risklar
+3. Bajarish — loyihalash, kod yozish, testlash
+4. Nazorat — progressni kuzatish, o'zgarishlarni boshqarish
+5. Yakunlash — topshirish, hujjatlar, xulosalar
+
+Agile'da bu sikl qisqa iteratsiyalarda (sprint) takrorlanadi.
+
+1.5. LOYIHA ISHTIROKCHILARI
+---------------------------
+- Buyurtmachi — talablarni belgilaydi, mablag' beradi, natijani qabul qiladi.
+- Loyiha menejeri — rejalashtiradi, jamoani muvofiqlashtiradi, risklarni boshqaradi.
+- Ishlab chiqish jamoasi — backend, frontend, mobil dasturchilar, dizayner, tester.
+- Oxirgi foydalanuvchilar — foydalanadi, fikr-mulohaza beradi.
+
+Scrum rollari (qisqacha): Product Owner (mahsulot qiymati va backlog ustuvorligi), Scrum Master (jarayonga rioya, to'siqlarni bartaraf etish), Development Team (har sprintda ishlaydigan inkrement). Bu fanda talaba jamoada rol tanlaydi va sprintlarda almashishi mumkin.
+
+1.6. UCHLIK CHEKLOV (QAMROV – VAQT – XARAJAT)
+---------------------------------------------
+Muvaffaqiyat uchta o'zaro bog'liq cheklov muvozanatiga tayanadi. Biri o'zgarsa, qolgan ikkitasi ta'sirlanadi.
+
+- Qamrov (Scope) — nima yaratiladi va qanday ishlar bajariladi?
+  - Mahsulot qamrovi — xususiyat va funksiyalar (API, veb, mobil).
+  - Loyiha qamrovi — mahsulotni yaratish uchun barcha ishlar.
+  - Vositalar: talablar ro'yxati, WBS, Product Backlog, qabul mezonlari.
+- Vaqt (Time) — qachon boshlanadi, qachon topshiriladi? Boshqarish 4 qadam:
+  1. Ishlarni aniqlash (WBS → vazifalar)
+  2. Davomiylikni baholash (soat yoki story point)
+  3. Bog'liqliklarni belgilash
+  4. Jadval tuzish va nazorat (Gantt, sprint reja, burndown)
+- Xarajat (Cost) — qancha resurs/mablag'? Turlari: mehnat (ish haqi), infratuzilma (server, domen, bulut), litsenziyalar/pullik xizmatlar, test qurilmalari va o'qitish. Talabalar loyihasida pul bo'lmasa ham har bir odam-soat xarajat hisoblanadi.
+
+Cheklovlar bog'liqligi:
+
+- Qamrov kengaysa -> Oqibat: Vaqt va xarajat oshadi yoki sifat pasayadi
+- Muddat qisqarsa -> Oqibat: Qamrov kamayadi yoki jamoa kengayadi (xarajat oshadi)
+- Byudjet kamaysa -> Oqibat: Qamrov qisqaradi yoki vaqt cho'ziladi
+
+"Tez, arzon, sifatli — uchtasidan odatda faqat ikkitasini tanlash mumkin."
+
+Qo'shimcha omillar: sifat (talabga moslik, ishonchlilik, qulaylik), risk, resurslar, manfaatdorlar roziligi.
+
+Agile yondashuvida:
+
+- An'anaviy -> Qamrov: Qat'iy; Vaqt: O'zgaruvchan; Xarajat: O'zgaruvchan
+- Agile/Scrum -> Qamrov: Moslashuvchan; Vaqt: Qat'iy (sprint); Xarajat: Qat'iy (jamoa)
+
+Scope creep — qamrovning kelishuvsiz, asta-sekin kengayishi. Oldini olish: aniq talablar va qabul mezonlari; o'zgarishlarni boshqarish tartibi; backlog ustuvorlashtirish; buyurtmachiga muntazam demo.
+
+1.7. PROFESSIONALIZM
+--------------------
+Professionalizm — bilim, mas'uliyat va axloqiy me'yorlarning kundalik ishdagi uyg'unligi.
+- Malaka (chuqur biladi, o'rganadi), Mas'uliyat (va'dasini bajaradi, xatosini tan oladi), Halollik (imkoniyatini to'g'ri baholaydi), Hamkorlik (ochiq muloqot).
+
+AT mutaxassisi mas'uliyati: buyurtmachi oldida (sifat, muddat, vakolat doirasi); jamiyat oldida (xavfsizlik, maxfiylik); kasb va hamkasblar oldida (halollik, hurmat, bilim almashish).
+
+Kasbiy etika — ACM/IEEE-CS kodeksining 8 tamoyili:
+Jamoat (jamiyat manfaati birinchi) · Mijoz (mijoz va ish beruvchi) · Mahsulot (yuqori sifat) · Mustaqillik (xolis qaror) · Boshqaruv (etik rahbarlik) · Kasb (obro'sini oshirish) · Hamkasblar (adolat, qo'llab-quvvatlash) · O'zini (doimiy o'rganish).
+
+Dasturiy litsenziyalar:
+
+- MIT -> Turi: Ruxsat beruvchi; Asosiy shart: Erkin foydalanish, litsenziya matni saqlanadi
+- Apache 2.0 -> Turi: Ruxsat beruvchi; Asosiy shart: Patent huquqi beriladi, o'zgarishlar qayd etiladi
+- GPL -> Turi: Copyleft; Asosiy shart: Hosila ishlar ham shu litsenziyada ochiq bo'ladi
+- Yopiq -> Turi: Tijoriy; Asosiy shart: Shartlarni huquq egasi belgilaydi
+
+Shaxsga doir ma'lumotlar himoyasi: faqat zarur ma'lumotni yig'ish; foydalanuvchi roziligi; parollarni heshlab saqlash, HTTPS; kirishni cheklash. Huquqiy asos: O'zbekistonning "Shaxsga doir ma'lumotlar to'g'risida"gi qonuni (2019), xalqaro namuna — GDPR.
+
+Professional jamoa odatlari: shaffof ish (Git/GitHub: branch, pull request, code review); muntazam muloqot (qisqa kundalik yig'ilish); hujjatlashtirish (README, API tavsifi, qarorlar yozuvi); o'zaro hurmat (tanqid ishga qaratiladi, shaxsga emas).
+
+1.8. FULL-STACK TUSHUNCHASI (UMUMIY TANISHUV)
+---------------------------------------------
+Full-stack dasturchi tizimning barcha qatlamlari bilan ishlay oladi: server, baza, veb, mobil.
+- Arxitektura: React.js (veb) va React Native/Expo (mobil) → HTTP orqali → Node.js + Express (REST API, JWT) → Ma'lumotlar bazasi. Javob JSON ko'rinishida.
+- Backend: Node.js (serverda JS), Express (yengil freymvork), REST API (marshrut, middleware), JWT autentifikatsiya.
+- React.js: komponentlar, JSX, state va hooks, Vite.
+- React Native + Expo: bitta kod bazasi iOS/Android; View, Text; Expo Go bilan telefonda sinash.
+- JavaScript ES6+: let/const, arrow funksiya, destrukturizatsiya, shablon satrlar, import/export, async/await.
+- TypeScript: JS ustiga statik tiplar; xatolar kod ishga tushguncha topiladi; katta jamoa uchun qulay.
+- npm, package.json: paketlar menejeri; scripts; dependencies/devDependencies; package-lock.json — aniq versiyalar.
+- Kerakli vositalar (tekshirish buyrug'i): VS Code (code --version), Node.js LTS (node -v), npm (npm -v), Git (git --version), Expo (npx expo --version).
+- Monorepo: bitta repozitoriyda apps/ (api, web, mobile) + packages/shared (umumiy kod) + package.json + README.md. npm workspaces orqali ulanadi.
+
+Nazorat savollari: loyiha belgilari; uchlik cheklov bog'liqligi; AT loyihalari o'ziga xosligi; full-stack ilovaning 3 qismi (backend, veb, mobil).
+
+============================================================
+2-BO'LIM. SDLC VA METODOLOGIYALAR
+============================================================
+
+2.1. SDLC (SOFTWARE DEVELOPMENT LIFE CYCLE)
+-------------------------------------------
+Dasturiy ta'minotni g'oyadan boshlab yaratish, joriy etish va qo'llab-quvvatlashgacha tartibli jarayon. Maqsad: sifatli mahsulotni belgilangan muddat va byudjetda yetkazish.
+
+- 1 -> Bosqich: Talablar tahlili; Natija: SRS hujjati, user story'lar
+- 2 -> Bosqich: Loyihalash; Natija: Arxitektura, UML, UI dizayn
+- 3 -> Bosqich: Dasturlash; Natija: Ishchi kod, unit testlar
+- 4 -> Bosqich: Testlash; Natija: Test hisobotlari, topilgan buglar
+- 5 -> Bosqich: Joriy etish; Natija: Release, deploy, ko'rsatmalar
+- 6 -> Bosqich: Qo'llab-quvvatlash; Natija: Xatolarni tuzatish, yangi talablar
+
+Qo'llab-quvvatlashdan yangi talablar keladi → sikl qaytadan boshlanadi.
+
+2.2. WATERFALL (SHARSHARA)
+--------------------------
+Bosqichlar ketma-ket: Talablar → Loyihalash → Dasturlash → Testlash → Qo'llab-quvvatlash.
+- Afzallik: sodda tuzilma; har bosqich hujjatlashtiriladi; boshqarish/baholash oson.
+- Kamchilik: o'zgarishga moslashish qiyin; testlash kech boshlanadi; mijoz natijani oxirida ko'radi.
+- Mos: talablar aniq va o'zgarmas loyihalar.
+
+2.3. V-MODEL
+------------
+Har loyihalash bosqichiga o'z testi mos keladi:
+
+- Biznes talablari -> Test (o'ng — validatsiya): Qabul testi (UAT)
+- Tizim talablari (SRS) -> Test (o'ng — validatsiya): Tizim testi
+- Arxitektura loyihasi -> Test (o'ng — validatsiya): Integratsion test
+- Modul dizayni -> Test (o'ng — validatsiya): Unit test
+- (pastda) Dasturlash (kodlash)
+
+Afzallik: test oldindan rejalashtiriladi. Kamchilik: Waterfall kabi o'zgarishga sust.
+
+2.4. ITERATIV VA INKREMENTAL MODELLAR
+-------------------------------------
+Har iteratsiyada: Reja → Dizayn → Kod → Test.
+- Iterativ: bir xil qism takror takomillashtiriladi; har aylanada fikr-mulohaza.
+- Inkremental: mahsulot qismlarga bo'linib ketma-ket yetkaziladi; har inkrement ishlaydi.
+- Spiral model: har aylanada xavflar tahlil qilinadi; katta va xavfli loyihalarga mos.
+
+2.5. MODELLARNI SOLISHTIRISH
+----------------------------
+
+- O'zgarishga moslashish -> Waterfall: Past; V-model: Past; Iterativ: O'rta; Agile: Yuqori
+- Mijoz ishtiroki -> Waterfall: Boshida va oxirida; V-model: Boshida va oxirida; Iterativ: Davriy; Agile: Doimiy
+- Testlash -> Waterfall: Oxirida; V-model: Har bosqichga oldindan; Iterativ: Har iteratsiyada; Agile: Doimiy, har sprintda
+- Ishlaydigan mahsulot -> Waterfall: Oxirida; V-model: Oxirida; Iterativ: Qismlab; Agile: Har 1–4 haftada
+- Xavflarni aniqlash -> Waterfall: Kech; V-model: O'rta; Iterativ: Erta; Agile: Erta
+- Mos keladi -> Waterfall: Talablar aniq loyiha; V-model: Xavfsizlik-kritik tizim; Iterativ: Katta bosqichli loyiha; Agile: Talablar o'zgaruvchan mahsulot
+
+2.6. AGILE MANIFESTI (2001, 17 DASTURCHI)
+-----------------------------------------
+Chapdagi qiymatlar ko'proq qadrlanadi (o'ngdagilar ham muhim):
+- Shaxslar va hamkorlik ← jarayonlar va vositalardan ko'ra
+- Ishlaydigan dastur ← to'liq hujjatlardan ko'ra
+- Mijoz bilan hamkorlik ← shartnoma muzokaralaridan ko'ra
+- O'zgarishlarga javob berish ← rejaga qat'iy rioya qilishdan ko'ra
+
+Asosiy tamoyillar (jami 12 ta): mijozni qoniqtirish (qimmatli dasturni erta va uzluksiz yetkazish); o'zgarishni qabul qilish (kech bo'lsa ham); tez-tez yetkazish (haftalar/oylar); kundalik hamkorlik; ishlaydigan dastur — progress o'lchovi; muntazam refleksiya.
+
+Agile — qadriyatlar to'plami; Scrum va Kanban — uni amalda qo'llash usullari.
+
+2.7. SCRUM
+----------
+Scrum — murakkab mahsulotlarni qisqa sikllar (sprintlar) bilan ishlab chiqish uchun yengil ramka (framework).
+- 3 rol: Product Owner, Scrum Master, Developers
+- 5 tadbir: Sprint, Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective
+- 3 artefakt: Product Backlog, Sprint Backlog, Increment
+- 3 ustun: shaffoflik · tekshirish (inspection) · moslashish (adaptation)
+
+Rollar:
+- Product Owner — Product Backlog'ni boshqaradi; ustuvorlik belgilaydi; mahsulot qiymatini oshiradi; stakeholderlar bilan aloqa.
+- Scrum Master — jarayon murabbiyi; Scrum qoidalariga rioyani ta'minlaydi; to'siqlarni (impediments) bartaraf etadi; yetakchi-xizmatkor, boshliq emas.
+- Developers — har sprintda ishlaydigan Increment yaratadi; Sprint Backlog'ni rejalashtiradi; o'zini o'zi boshqaradi, ko'p funksiyali.
+- Jamoa odatda 10 kishi yoki undan kam.
+
+Sprint sikli: Product Backlog → Sprint Planning (maqsad + Sprint Backlog tanlanadi) → Sprint (1–4 hafta, har kuni Daily Scrum) → Sprint Review (increment ko'rsatiladi) → Retrospective (jarayonni yaxshilash) → keyingi sprint.
+Raqamlar: sprint 1–4 hafta (qat'iy); Daily Scrum 15 daqiqa; har sprint oxirida 1 Increment.
+
+Tadbirlar (bir oylik sprint uchun maksimum):
+
+- Sprint -> Maqsadi: Barcha tadbirlar konteyneri; natija — Increment; Davomiylik: 1 oygacha; Kimlar: Scrum jamoasi
+- Sprint Planning -> Maqsadi: Nima va qanday qilinadi — Sprint Goal; Davomiylik: ≤ 8 soat; Kimlar: Butun jamoa
+- Daily Scrum -> Maqsadi: Sprint Goal bo'yicha progress, kunlik reja; Davomiylik: 15 daqiqa; Kimlar: Developers
+- Sprint Review -> Maqsadi: Natijani stakeholderlarga ko'rsatish, backlog'ni moslash; Davomiylik: ≤ 4 soat; Kimlar: Jamoa + stakeholderlar
+- Sprint Retrospective -> Maqsadi: Sifat va samaradorlikni oshirish yo'llari; Davomiylik: ≤ 3 soat; Kimlar: Scrum jamoasi
+
+Qisqaroq sprintda vaqt proporsional kamayadi.
+
+Artefaktlar va ularning majburiyati (commitment):
+- Product Backlog — mahsulotni yaxshilash uchun hamma narsaning tartiblangan ro'yxati; talablarning yagona manbai → majburiyat: Product Goal.
+- Sprint Backlog — sprint maqsadi + tanlangan elementlar + bajarish rejasi → majburiyat: Sprint Goal.
+- Increment — maqsadga yaqinlashtiruvchi, ishlatishga yaroqli natija → majburiyat: Definition of Done.
+- User story namunasi: "Foydalanuvchi sifatida men tizimga kirishni xohlayman, shunda shaxsiy kabinetimni ko'raman."
+
+2.8. KANBAN
+-----------
+Ishni vizuallashtirish — doskada kartochkalar. Ustunlar: To Do → Jarayonda (WIP limit: 3) → Tekshiruvda (WIP limit: 2) → Done.
+- Vizualizatsiya — ish doskada ko'rinadi.
+- WIP limiti — bir vaqtda bajariladigan ishni cheklash.
+- Oqimni boshqarish — to'siq va navbatlar aniqlanadi.
+- Doimiy yaxshilash — cycle time va throughput kuzatiladi.
+
+2.9. SCRUM VA KANBAN SOLISHTIRISH
+---------------------------------
+
+- Ish ritmi -> Scrum: Qat'iy sprintlar (1–4 hafta); Kanban: Uzluksiz oqim, sprint yo'q
+- Rollar -> Scrum: PO, SM, Developers; Kanban: Maxsus rol majburiy emas
+- O'zgarishlar -> Scrum: Sprint davomida odatda kiritilmaydi; Kanban: Istalgan vaqtda mumkin
+- Cheklov -> Scrum: Sprint hajmi (jamoa imkoniyati); Kanban: WIP limiti
+- Metrikalar -> Scrum: Velocity, burndown; Kanban: Cycle time, throughput
+- Mos -> Scrum: Mahsulot ishlab chiqish, rejali relizlar; Kanban: Qo'llab-quvvatlash, DevOps
+
+Scrumban — ikkala yondashuv aralashmasi.
+
+Nazorat savollari: Waterfall va Agile farqi; V-modelda har loyihalash bosqichiga qaysi test mos; Scrum rollari; Kanban'da WIP nima uchun.
+
+============================================================
+3-BO'LIM. LOYIHANI REJALASHTIRISH VA ISHNI BAHOLASH
+============================================================
+
+3.1. NEGA REJALASHTIRISH KERAK?
+-------------------------------
+Uch asos: Qamrov (nima qilinadi — nimalar kiradi/kirmaydi), Muddat (qachon tayyor — ketma-ketlik, bog'liqlik, nazorat nuqtalari), Byudjet (qancha resurs). Sifat markazda. Bittasi o'zgarsa qolganlari o'zgaradi.
+
+3.2. WBS (WORK BREAKDOWN STRUCTURE)
+-----------------------------------
+Loyiha qamrovini natijalar bo'yicha kichik, baholash/nazorat qilish mumkin bo'lgan ish paketlariga ierarxik bo'lish.
+- 100% qoida: pastki elementlar yig'indisi yuqoridagining butun ishini qoplaydi — ortiqcha ham, kam ham emas.
+- Natijaga yo'naltirilgan: harakatlarga emas, mahsulot va natijalarga qarab bo'linadi.
+- Ish paketi o'lchami: odatda 8–80 soat.
+- Darajalar: 1 — Loyiha; 2 — Natijalar (fazalar); 3 — Ish paketlari; 4 — Faoliyatlar.
+
+Namuna (Task Manager ilovasi): 1. Tahlil (1.1 Talablar tahlili) · 2. Dizayn (2.1 UI dizayn, 2.2 DB sxemasi/ER) · 3. Ishlab chiqish (3.1 Backend API, 3.2 Frontend, 3.3 Integratsiya) · 4. Test va reliz (4.1). Jami 7 ish paketi (A–G).
+
+3.3. GANTT DIAGRAMMASI
+----------------------
+Ishlar vaqt o'qida chiziqlar ko'rinishida. Misol (kunlarda): A Talablar 3 · B UI dizayn 4 · C DB sxemasi 3 · D Backend API 7 · E Frontend 5 · F Integratsiya 3 · G Test va reliz 2.
+Milestone'lar M1–M5 belgilanadi. Kritik yo'l: A → C → D → F → G. Float'li ishlar: B, E.
+
+3.4. ISHLAR ORASIDAGI BOG'LIQLIKLAR
+-----------------------------------
+
+- FS Finish-to-Start -> Ma'nosi: A tugagach B boshlanadi (eng keng tarqalgan); Misol: DB sxemasi tugagach — backend
+- SS Start-to-Start -> Ma'nosi: A boshlangach B ham boshlanishi mumkin; Misol: dizayn boshlangach — frontend
+- FF Finish-to-Finish -> Ma'nosi: A tugamaguncha B ham tugay olmaydi; Misol: kod yozish va hujjatlash
+- SF Start-to-Finish -> Ma'nosi: A boshlanmaguncha B tugay olmaydi (kam); Misol: yangi tizim ishga tushgach eskisi o'chadi
+
+Lead — ishni oldinga siljitish; lag — kechiktirish (masalan FS + 2 kun).
+
+3.5. KRITIK YO'L USULI (CPM)
+----------------------------
+Qadamlar: 1) ishlar, davomiylik, oldingi ishlar ro'yxati → 2) oldinga yurish (boshdan oxirga: ES, EF) → 3) orqaga yurish (oxirdan boshga: LF, LS) → 4) float va kritik yo'l.
+
+Formulalar:
+- EF = ES + davomiylik
+- LS = LF − davomiylik
+- Float = LS − ES = LF − EF
+- Float = 0 → kritik ish. Float = 0 bo'lgan ishlar zanjiri = kritik yo'l.
+
+(ES — Early Start, EF — Early Finish, LS — Late Start, LF — Late Finish.)
+
+Hisoblash misoli:
+
+- A Talablar -> Davom.: 3; ES: 0; EF: 3; LS: 0; LF: 3; Float: 0
+- B UI dizayn -> Davom.: 4; ES: 3; EF: 7; LS: 4; LF: 8; Float: 1
+- C DB sxemasi -> Davom.: 3; ES: 3; EF: 6; LS: 3; LF: 6; Float: 0
+- D Backend API -> Davom.: 7; ES: 6; EF: 13; LS: 6; LF: 13; Float: 0
+- E Frontend -> Davom.: 5; ES: 7; EF: 12; LS: 8; LF: 13; Float: 1
+- F Integratsiya -> Davom.: 3; ES: 13; EF: 16; LS: 13; LF: 16; Float: 0
+- G Test va reliz -> Davom.: 2; ES: 16; EF: 18; LS: 16; LF: 18; Float: 0
+
+Kritik yo'l A→C→D→F→G = 3+3+7+3+2 = 18 kun. B va E da float = 1: 1 kun kechiksa ham muddat o'zgarmaydi. Muqobil yo'l A→B→E→F→G = 17 kun.
+
+3.6. MILESTONE'LAR (NAZORAT NUQTALARI)
+--------------------------------------
+- Ish emas, tekshirsa bo'ladigan aniq natija ("ER model tasdiqlandi").
+- Qaror nuqtasi — go / no-go qarori.
+- Hisobot va nazorat — mijoz/rahbariyatga progress; to'lovlar ko'pincha shunga bog'lanadi.
+- Misol: M1 Talablar tasdiqlandi (3-kun) · M2 UI maket va ER tayyor (7) · M3 Backend API tayyor (13) · M4 MVP, integratsiya tugadi (16) · M5 Reliz (18).
+
+3.7. ISHNI BAHOLASH USULLARI
+----------------------------
+1. Ekspert baholash — tez, lekin sub'ektiv.
+2. Analogik — o'xshash oldingi loyiha ma'lumoti; erta bosqichda qulay.
+3. Parametrik — birlik hajmi × birlik narxi (12 ekran × 2 kun = 24 kun).
+4. Uch nuqtali (PERT) — noaniqlik hisobga olinadi.
+
+Agile'da soat o'rniga nisbiy baholash — story points.
+
+3.8. PERT (UCH NUQTALI BAHOLASH)
+--------------------------------
+- O — optimistik (eng qisqa), M — ehtimoliy (odatiy), P — pessimistik (eng uzoq).
+- E = (O + 4M + P) / 6 — kutilayotgan davomiylik (M ga 4 barobar og'irlik).
+- σ = (P − O) / 6 — standart og'ish (noaniqlik o'lchovi).
+- Loyiha uchun: ΣE (kritik yo'lda) va σ_loyiha = √(Σσ²).
+
+Misol (ketma-ket 3 ish):
+
+- DB sxemasi -> O: 2; M: 3; P: 4; E: 3,0; σ: 0,33
+- Backend API -> O: 4; M: 7; P: 16; E: 8,0; σ: 2,00
+- Frontend -> O: 3; M: 5; P: 7; E: 5,0; σ: 0,67
+- Jami -> E: 16,0; σ: 2,13
+
+σ_loyiha = √(0,11 + 4,00 + 0,44) ≈ 2,13 → 16 kun ± 2,1. Ehtimol: ≈ 68% — 14–18 kun; ≈ 95% — 12–20 kun.
+
+3.9. STORY POINTS VA PLANNING POKER
+-----------------------------------
+- Story point — soat emas, nisbiy o'lchov: hajm + murakkablik + noaniqlik birgalikda.
+- Shkala (Fibonacci): 1, 2, 3, 5, 8, 13, 21 — katta ishlarda aniq baho qiyinligini aks ettiradi.
+- Planning Poker 4 qadam: 1) Story o'qiladi (PO tushuntiradi) → 2) Savollar (noaniqlar aniqlanadi) → 3) Ovoz berish (hamma bir vaqtda karta ko'rsatadi) → 4) Kelishuv (baho farq qilsa — muhokama va qayta ovoz).
+
+3.10. SPRINT REJALASHTIRISH
+---------------------------
+Sprint sikli: Product Backlog → Sprint Planning → Sprint (1–4 hafta, Daily 15 daq) → Review → Retrospective → takrorlanadi. PO — nima qilish, Scrum Master — jarayon xizmatchisi, Developers — qanday qilish.
+
+Nimani olamiz:
+- Velocity — oldingi sprintlarda bajarilgan SP o'rtachasi. Misol: 28, 32, 30 → o'rtacha 30 SP.
+- Capacity (sig'im) = odam × ish kuni × fokus-soat. Misol: 4 × 8 × 6 = 192 soat.
+- Sprint Goal — masalan: "Foydalanuvchi loyiha yaratib, vazifalarni tayinlay oladi".
+- Definition of Done: kod review'dan o'tgan; avtomatik testlar yashil; hujjat/API tavsifi yangilangan; staging'da ishlaydi, demo'ga tayyor.
+
+Sprint backlog va burndown misoli (jami 30 SP): Ro'yxatdan o'tish/login 5 (Done) · Loyiha CRUD 8 (Done) · Vazifa yaratish/tayinlash 5 (In progress) · Teglar/filtr 8 (To do) · Izohlar 3 (To do) · Sana formati 1 (To do). 5-kunda: 13 SP bajarilgan, 17 SP qolgan. (Burndown — qolgan ishning kunlar bo'yicha kamayish grafigi.)
+
+============================================================
+4-BO'LIM. RISK VA SIFATNI BOSHQARISH
+============================================================
+
+4.1. RISK NIMA?
+---------------
+Risk — kelajakda yuz berishi mumkin bo'lgan va loyiha maqsadlariga (muddat, byudjet, sifat, xavfsizlik) ta'sir qiluvchi noaniq hodisa.
+- Risk — hali yuz bermagan, ehtimolligi < 100%.
+- Muammo (issue) — allaqachon yuz bergan; hozir hal qilinadi.
+- Imkoniyat — ijobiy ta'sirli risk.
+- Risk darajasi = E × T (E — ehtimollik 1–5, T — ta'sir 1–5). Misol: 4×5 = 20 — kritik.
+
+4.2. RISKLARNI BOSHQARISH JARAYONI (6 QADAM)
+--------------------------------------------
+1. Aniqlash — ro'yxatga olish: nima, kim, qachon
+2. Tahlil — ehtimollik va ta'sirni baholash
+3. Ustuvorlik — matritsa bo'yicha eng muhimlarini tanlash
+4. Javob — strategiya va mas'ul belgilash
+5. Monitoring — triggerlarni kuzatish, registrni yangilash
+6. Yopish — saboqlar (lessons learned)
+
+Jarayon tsiklik: risklar har sprint boshida qayta ko'riladi.
+
+4.3. RISKLARNI ANIQLASH USULLARI
+--------------------------------
+Aqliy hujum (brainstorming) · Delphi (ekspertlar anonim, bir necha raund) · SWOT (kuchli/zaif tomon, imkoniyat/tahdid) · Nazorat ro'yxati (masalan OWASP Top 10) · Tahdidlar modeli STRIDE · Saboqlar tahlili.
+
+4.4. EHTIMOLLIK–TA'SIR MATRITSASI
+---------------------------------
+Ball = E × T (1–5 shkala). Zonalar:
+- Past (1–4) — kuzatish, alohida chora shart emas
+- O'rta (5–9) — rejaga kiritish, monitoring
+- Yuqori (10–16) — faol kamaytirish choralari
+- Kritik (20–25) — darhol choralar, rahbariyatga xabar
+
+(Nazorat savoli: E=4, T=3 → 12 → Yuqori zona.)
+
+4.5. RISKLARGA JAVOB STRATEGIYALARI (4 TA)
+------------------------------------------
+- Oldini olish (Avoid) -> Ma'nosi: Manbani butunlay yo'q qilish/qochish; Misol: Qo'llab-quvvatlanmayotgan xavfli kutubxonadan voz kechish
+- Kamaytirish (Mitigate) -> Ma'nosi: Ehtimol yoki ta'sirni pasaytirish; Misol: Code review, testlar, bcrypt, rate limit, zaxira nusxa
+- Ko'chirish (Transfer) -> Ma'nosi: Oqibat/javobgarlikni 3-tomonga o'tkazish; Misol: Sug'urta, bulut SLA, tashqi to'lov shlyuzi
+- Qabul qilish (Accept) -> Ma'nosi: Past riskni ongli qabul qilish; Misol: Zaxira reja (contingency) tayyorlab, hech narsa qilmaslik
+
+4.6. RISK REGISTRI (NAMUNA)
+---------------------------
+- R-01 -> Risk: Parollar ochiq matnda saqlanadi; E: 4; T: 5; Ball: 20; Strategiya: Kamaytirish: bcrypt
+- R-02 -> Risk: JWT maxfiy kaliti repoga tushadi; E: 3; T: 5; Ball: 15; Strategiya: Kamaytirish: .env, kalit rotatsiyasi
+- R-03 -> Risk: API'da so'rovlar cheklanmagan (brute-force, DoS); E: 4; T: 3; Ball: 12; Strategiya: Kamaytirish: rate limit
+- R-04 -> Risk: Asosiy dasturchi ketadi; E: 2; T: 4; Ball: 8; Strategiya: Qabul qilish + hujjatlashtirish
+
+Real loyihada qo'shimcha ustunlar: mas'ul, trigger, muddat, holat. Registr har sprintda yangilanadi.
+
+4.7. SIFAT: QP, QA, QC
+----------------------
+- Quality Planning (QP) — qanday sifat kerak va unga qanday erishish oldindan belgilanadi.
+- Quality Assurance (QA) — jarayonga qaratilgan: standartlar, review, audit.
+- Quality Control (QC) — mahsulotga qaratilgan: testlash, defekt topish va tuzatish.
+- Sifat rejasida: sifat maqsadlari, metrikalar, standartlar, test strategiyasi, sifat darvozalari, rollar va vositalar.
+- Namuna maqsadlar: test qamrovi ≥ 80% · kritik zaiflik = 0 · API javob vaqti (p95) < 300 ms.
+
+4.8. ISO/IEC 25010 — 8 SIFAT XUSUSIYATI
+---------------------------------------
+Funksional moslik · Unumdorlik (tezlik, resurs) · Moslik (boshqa tizimlar bilan) · Qulaylik (usability) · Ishonchlilik (barqarorlik) · Xavfsizlik (maxfiylik, yaxlitlik, autentiklik) · Qo'llab-quvvatlash (maintainability) · Ko'chiruvchanlik (portability).
+
+4.9. TEST PIRAMIDASI
+--------------------
+- Yuqori: E2E / UI — kam, sekin, qimmat (to'liq foydalanuvchi stsenariysi).
+- O'rta: Integratsion / API — o'rtacha (modul, endpoint, baza birga; Supertest).
+- Quyi: Unit — ko'p, tez, arzon (alohida funksiya; Jest, Vitest).
+- Xavfsizlik testlari: SAST (kod tahlili) · SCA (npm audit, kutubxonalar) · DAST (ishlayotgan ilova).
+
+4.10. DEFINITION OF DONE (DOD)
+------------------------------
+DoD — jamoa kelishgan, ishni "tayyor" deb hisoblash uchun bajarilishi shart sifat mezonlari ro'yxati.
+- DoD — barcha vazifalarga umumiy sifat standarti.
+- Acceptance Criteria — har bir user story uchun alohida, funksional shartlar.
+- Namunaviy DoD (API loyiha): PR review'dan o'tgan · unit va integratsion testlar yashil · test qamrovi chegaradan yuqori · lint va SAST xatosiz · npm auditda kritik zaiflik yo'q · sirlar (.env) repoga tushmagan · API hujjati (OpenAPI) yangilangan · staging'da joylashtirilgan.
+
+4.11. SIFAT DARVOZALARI (CI/CD KONVEYER)
+----------------------------------------
+Tartib: Commit/Push → Lint + format → Unit testlar → SAST + npm audit → Integratsion testlar → Staging'ga deploy → DAST + smoke test.
+- Quality gate — har bosqichda shart (testlar yashil, kritik zaiflik = 0); bajarilmasa konveyer to'xtaydi.
+- Shift-left — xavfsizlik/sifat tekshiruvini iloji boricha erta (commit, PR) bajarish: xatoni tuzatish arzonroq.
+
+Nazorat savollari: E=4, T=3 qaysi zona (Yuqori); QA va QC farqi (jarayon vs mahsulot).
